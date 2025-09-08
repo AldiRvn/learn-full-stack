@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './App.css';
 import Article from './Article';
 
@@ -20,12 +20,20 @@ function App() {
         setArticles(results.data.map(d => ({
           id: d.id,
           name: d.name,
+          type: d.type,
           image: d.card_images[0].image_url,
         })))
+        setFilterType("")
       }
     }
     getArticles(search)
   }, [search])
+  //? Handle Filter
+  const [filterType, setFilterType] = useState("")
+  const filteredData = useMemo(() => {
+    console.log("Filter()", filterType)
+    return filterType !== "" ? articles.filter(d => d.type === filterType) : articles
+  }, [articles, filterType])
   return (
     <main className='App'>
 
@@ -36,6 +44,7 @@ function App() {
           <input type="search" className="mx-1 form-control" id="inputSearch" placeholder="Search..."
             onChange={e => setSearch(e.target.value)}
           ></input>
+          <button type="button" className="mx-1 btn btn-outline-primary" onClick={() => setFilterType("Effect Monster")}>Filter Effect Monster</button>
           <button type="button" className="mx-1 btn btn-secondary">Dark Mode</button>
         </form>
       </div>
@@ -43,7 +52,7 @@ function App() {
       <section className="container">
         <h2 className="fw-light text-center my-4 text-truncate">Results of {search}: </h2>
         <div className="row row-cols-4">
-          {articles.map(d => ( //? Looping komponen
+          {filteredData.map(d => ( //? Looping komponen
             <Article
               key={d.id}
               name={d.name}

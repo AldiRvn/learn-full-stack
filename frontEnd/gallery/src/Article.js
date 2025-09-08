@@ -1,9 +1,6 @@
 //? Saat komponen di panggil React akan mengirim satu object saja
 //? Jadi perlu di deconstruct seperti berikut
-export default function Article({name, image}) {
-  console.log("Article()");
-
-  console.log("name",name)
+export default function Article({ name, image }) {
   return (
     <article className="col">
       < div className="card shadow-sm" >
